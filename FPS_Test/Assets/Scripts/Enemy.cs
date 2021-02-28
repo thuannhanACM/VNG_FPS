@@ -26,12 +26,14 @@ public class Enemy : MonoBehaviour
     private float mMaxHP = 0.0f;
 
     private Action<Enemy> OnDead = null;
+    private bool isInit = false;
 
     public void Init(Action<Enemy> ondead, float healthModifier, float speedModifier)
     {
         mMaxHP = mHP = mBaseHP * healthModifier;
         OnDead = ondead;
         mNavMeshAgent.speed = mMoveSpeed * speedModifier;
+        isInit = true;
     }
 
     private void FixedUpdate()
@@ -44,6 +46,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if (!isInit)
+            return;
         float dist = mNavMeshAgent.remainingDistance;
         if (dist != Mathf.Infinity && mNavMeshAgent.pathStatus == NavMeshPathStatus.PathComplete && mNavMeshAgent.remainingDistance == 0)
         {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,6 +22,10 @@ public class WayPoint : MonoBehaviour
     private int mWaveCount = 0;
     private int mEnemyCount = 0;
     private bool mIsSpawnerActive = false;
+    private int mNumEnemiesKilled = 0;
+    private int mTotalEnemies = 0;
+
+    public Action OnFinishedGroup = null;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -32,6 +37,10 @@ public class WayPoint : MonoBehaviour
         mSpawnTimer = mSpawnRate[mWaveCount];
 
         GameController.Instance.OnWayPointActive();
+
+        mTotalEnemies = 0;
+        for (int i = 0; i < mEnemies.Length; i++)
+            mTotalEnemies += mEnemies[i];
     }
 
     private void Update()
@@ -40,7 +49,7 @@ public class WayPoint : MonoBehaviour
             return;
         if (mSpawnTimer <= 0.0f && mEnemyCount < mEnemies[mWaveCount])
         {
-            Vector3 pos = mSpawnPoints[Random.Range(0, mSpawnPoints.Length)].position;
+            Vector3 pos = mSpawnPoints[UnityEngine.Random.Range(0, mSpawnPoints.Length)].position;
             SpawnEnemies(pos);
             mEnemyCount++;
             mSpawnTimer = mSpawnRate[mWaveCount];
@@ -55,6 +64,8 @@ public class WayPoint : MonoBehaviour
     {
         mActiveEnemies.Remove(enemy);
         Destroy(enemy.gameObject);
+        mNumEnemiesKilled++;
+        GameController.Instance.UpdateEnemyKill(mNumEnemiesKilled, mTotalEnemies);
 
         if (mActiveEnemies.Count == 0 && mEnemyCount >= mEnemies[mWaveCount])
         {
@@ -70,6 +81,12 @@ public class WayPoint : MonoBehaviour
                     foreach(GameObject o in OnClearObjects)
                         o.SetActive(true);
                 }
+
+                if (OnFinishedGroup != null)
+                    OnFinishedGroup.Invoke();
+
+                GameController.Instance.UpdateEnemyKill(mNumEnemiesKilled, mTotalEnemies);
+
                 gameObject.SetActive(false);
             }
         }
@@ -77,7 +94,7 @@ public class WayPoint : MonoBehaviour
 
     private void SpawnEnemies(Vector3 pos)
     {
-        GameObject enemyObj = Instantiate(mEnemiesPrefab[Random.Range(0, mEnemiesPrefab.Length)], pos, Quaternion.identity);
+        GameObject enemyObj = Instantiate(mEnemiesPrefab[UnityEngine.Random.Range(0, mEnemiesPrefab.Length)], pos, Quaternion.identity);
         Enemy enemy = enemyObj.GetComponent<Enemy>();
         enemy.Init(OnEnemiesDeath, mHealthModifier, mSpeedModifier);
         mActiveEnemies.Add(enemy);

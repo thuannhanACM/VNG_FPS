@@ -76,7 +76,8 @@ public class Player : MonoBehaviour
             if (bullet != null)
                 bullet.Init(mBulletSpeed, targetPos);
 
-            mShootingSource.PlayOneShot(mShootingSource.clip);
+            if(GameController.Instance.SFX)
+                mShootingSource.PlayOneShot(mShootingSource.clip);
         }
     }
 
