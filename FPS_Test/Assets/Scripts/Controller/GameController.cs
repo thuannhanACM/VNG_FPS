@@ -9,7 +9,7 @@ using UnityEngine.UI;
 public class GameController : Singleton<GameController>
 {
     public const string FIRE_RATE_DESC = "Increase Fire Rate";
-    public const string DAMAGE_DESC = "Increase Base Damage";
+    public const string DAMAGE_DESC = "Increase Damage";
     public const string CRIT_RATE_DESC = "Increase Crit Rate";
     public const string DOUBLE_BULLET_DESC = "Increase Bullets";
     public enum UPGRADE { FIRE_RATE, DAMAGE, CRIT_RATE, DOUBLE_BULLET };
@@ -63,6 +63,11 @@ public class GameController : Singleton<GameController>
         return mPlayer.transform.position;
     }
 
+    public Transform GetPlayerTransform()
+    {
+        return mPlayer.transform;
+    }
+
     public void RegisterPlayer(Player p)
     {
         mPlayer = p;
@@ -92,8 +97,6 @@ public class GameController : Singleton<GameController>
 
     public void PlayDeadAnimation()
     {
-        Debug.LogError("Player Dead");
-
         UIManager.Instance.OnGameOver();
     }
 
@@ -159,9 +162,6 @@ public class GameController : Singleton<GameController>
         List<UPGRADE> upgrades = new List<UPGRADE>(){ UPGRADE.FIRE_RATE, UPGRADE.DAMAGE, UPGRADE.CRIT_RATE };
         if (!mHasDoubleBullet)
             upgrades.Add(UPGRADE.DOUBLE_BULLET);
-
-        if (!mHasRicochet)
-            upgrades.Add(UPGRADE.RICOCHET);
 
         UPGRADE[] upgradesArray = upgrades.ToArray();
         System.Random r = new System.Random();

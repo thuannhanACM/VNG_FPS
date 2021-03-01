@@ -27,6 +27,9 @@ public class UIManager : Singleton<UIManager>
     private CanvasGroup mGameProgressCanvas = null;
 
     [SerializeField]
+    private Text mGameProgressText = null;
+
+    [SerializeField]
     private Image mCrossHairImg;
 
     [SerializeField]
@@ -34,6 +37,12 @@ public class UIManager : Singleton<UIManager>
 
     [SerializeField]
     private GameObject mGameWinPanel;
+
+    [SerializeField]
+    private Transform mEnemyLocatorsRoot;
+
+    [SerializeField]
+    private GameObject mEnemyLocatorPrefab;
 
     // Start is called before the first frame update
     void Start()
@@ -59,6 +68,8 @@ public class UIManager : Singleton<UIManager>
         float progress = (float)completeGroup / (float)totalGroup;
 
         mGameProgress.fillAmount = progress;
+
+        mGameProgressText.text = string.Format("Completed Stage: {0}/{1}", completeGroup, totalGroup); 
     }
 
     public void ShowCrossHair(bool show)
@@ -95,5 +106,13 @@ public class UIManager : Singleton<UIManager>
     public void CloseUpgradeDialog()
     {
         mDialogs[(int)Dialog.UpgradeDialog].Close(1.0f);
+    }
+
+    public GameObject GenerateEnemyLocator()
+    {
+        GameObject locator = Instantiate(mEnemyLocatorPrefab);
+        locator.transform.parent = mEnemyLocatorsRoot;
+        locator.transform.localScale = Vector3.one;
+        return locator;
     }
 }

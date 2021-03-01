@@ -48,8 +48,8 @@ public class AimAndFire : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(mCamera.transform.position, mCamera.transform.forward, out hit, 999))
             {
-                if (hit.transform.tag == "Target")
-                    mPlayer.Fire(hit.point);
+                //if (hit.transform.tag == "Target")
+                mPlayer.Fire(hit.point);
             }
         }
     }

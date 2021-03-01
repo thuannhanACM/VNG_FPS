@@ -274,7 +274,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mMoveSpeed: 3
-  mBaseHP: 40
+  mBaseHP: 30
   mNavMeshAgent: {fileID: 6229251685856005381}
   mRenderer: {fileID: 3514286684036356290}
 --- !u!1 &3514286684022511856

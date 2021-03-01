@@ -1,0 +1,4 @@
+#Mon Mar 01 16:00:39 ICT 2021
+base.0=C\:\\Users\\Dell\\Documents\\GitHub\\VNG_FPS\\FPS_Test\\Temp\\gradleOut\\launcher\\build\\intermediates\\transforms\\dexMerger\\release\\0
+path.0=classes.dex
+renamed.0=classes.dex

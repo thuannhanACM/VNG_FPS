@@ -18,7 +18,7 @@ public class WayPoint : MonoBehaviour
     private List<Enemy> mActiveEnemies = new List<Enemy>();
     private float mSpawnTimer = 0.0f;
     private int mWaveCount = 0;
-    private int mEnemyCount = 0;
+    private int mEnemyCountPerWave = 0;
     private bool mIsSpawnerActive = false;
     private int mNumEnemiesKilled = 0;
     private int mTotalEnemies = 0;
@@ -31,7 +31,7 @@ public class WayPoint : MonoBehaviour
 
         mIsSpawnerActive = true;
         mWaveCount = 0;
-        mEnemyCount = 0;
+        mEnemyCountPerWave = 0;
         mSpawnTimer = mSpawnRate[mWaveCount];
 
         GameController.Instance.OnWayPointActive();
@@ -45,11 +45,11 @@ public class WayPoint : MonoBehaviour
     {
         if (!mIsSpawnerActive)
             return;
-        if (mSpawnTimer <= 0.0f && mEnemyCount < mEnemies[mWaveCount])
+        if (mSpawnTimer <= 0.0f && mEnemyCountPerWave < mEnemies[mWaveCount])
         {
             Vector3 pos = mSpawnPoints[UnityEngine.Random.Range(0, mSpawnPoints.Length)].position;
             SpawnEnemies(pos);
-            mEnemyCount++;
+            mEnemyCountPerWave++;
             mSpawnTimer = mSpawnRate[mWaveCount];
         }
         else if (mSpawnTimer > 0.0f)
@@ -64,9 +64,10 @@ public class WayPoint : MonoBehaviour
         Destroy(enemy.gameObject);
         mNumEnemiesKilled++;
 
-        if (mActiveEnemies.Count == 0 && mEnemyCount >= mEnemies[mWaveCount])
+        if (mActiveEnemies.Count == 0 && mEnemyCountPerWave >= mEnemies[mWaveCount])
         {
             //all enemies in are eliminated => start new wave
+            mEnemyCountPerWave = 0;
             mWaveCount++;
 
             if (mWaveCount >= mEnemies.Length)

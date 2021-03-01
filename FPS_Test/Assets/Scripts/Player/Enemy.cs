@@ -24,6 +24,8 @@ public class Enemy : MonoBehaviour
     private Action<Enemy> OnDead = null;
     private bool isInit = false;
 
+    private EnemyLocator mLocator;
+
     public void Init(Action<Enemy> ondead, float healthModifier, float speedModifier)
     {
         mMaxHP = mHP = mBaseHP * healthModifier;
@@ -31,6 +33,8 @@ public class Enemy : MonoBehaviour
         mNavMeshAgent.speed = mMoveSpeed * speedModifier;
         mNavMeshAgent.destination = GameController.Instance.GetPlayerPos();
         isInit = true;
+
+        mLocator = UIManager.Instance.GenerateEnemyLocator().GetComponent<EnemyLocator>();
     }
 
     private void Update()
@@ -43,6 +47,7 @@ public class Enemy : MonoBehaviour
         {
             GameController.Instance.PlayDeadAnimation();
         }
+        mLocator.UpdateLocator(transform.position);
     }
 
     public void ApplyDamage(float damage)
@@ -51,6 +56,8 @@ public class Enemy : MonoBehaviour
         mRenderer.material.color = Color.Lerp(Color.white, Color.red, (1 - (mHP / mMaxHP)));
         if (mHP <= 0)
         {
+            Destroy(mLocator.gameObject);
+
             if (OnDead != null)
             {
                 OnDead.Invoke(this);
