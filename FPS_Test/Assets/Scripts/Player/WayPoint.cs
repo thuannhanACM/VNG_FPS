@@ -75,6 +75,7 @@ public class WayPoint : MonoBehaviour
                 if (mHasUpgrade)
                 {
                     Debug.Log("ShowUpgrade");
+                    GameController.Instance.PrepareUpgradeDialog(ActiveNextRound);
                 }
                 else
                     ActiveNextRound();

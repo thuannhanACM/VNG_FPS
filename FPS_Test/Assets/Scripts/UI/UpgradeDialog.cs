@@ -13,6 +13,12 @@ public class UpgradeDialog : BaseDialog
     [SerializeField]
     private RectTransform rectTransform;
 
+    [SerializeField]
+    private GameObject mUpgradeItemPrefab;
+
+    [SerializeField]
+    private RectTransform mLayoutRtf;
+
     public override void Init()
     {
         base.Init();
@@ -26,7 +32,6 @@ public class UpgradeDialog : BaseDialog
 
     public override void Open(float sp = 1)
     {
-        UIManager.Instance.ShowCrossHair(false);
         BlocksRaycasts = true;
         Interactable = true;
         rectTransform
@@ -38,18 +43,33 @@ public class UpgradeDialog : BaseDialog
 
     public override void Close(float sp = 1, Action callback = null)
     {
-        BlocksRaycasts = true;
-        Interactable = true;
+        BlocksRaycasts = false;
+        Interactable = false;
         rectTransform
             .DOScale(0.0f, sp)
             .SetEase(mEaseType)
+            .OnComplete(()=> ClearUpgrades())
             .Play();
         Refresh();
     }
 
-    public void PlayGame()
+    public void SetUpgrade(GameController.UPGRADE[] upgrades)
     {
-        Close();
-        StartCoroutine(GameController.Instance.DelayStartGame());
+        for (int i = 0; i < 3; i++)
+        {
+            GameObject item = Instantiate(mUpgradeItemPrefab);
+            item.transform.SetParent(mLayoutRtf);
+            item.transform.localScale = Vector3.one;
+            item.GetComponent<UpgradeItem>().Init(upgrades[i]);
+        }
+        Open(1.0f);
+    }
+
+    public void ClearUpgrades()
+    {
+        for (int i = mLayoutRtf.childCount - 1; i >= 0; i--)
+        {
+            Destroy(mLayoutRtf.GetChild(i).gameObject);
+        }
     }
 }

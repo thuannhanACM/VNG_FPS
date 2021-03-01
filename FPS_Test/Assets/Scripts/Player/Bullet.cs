@@ -29,7 +29,13 @@ public class Bullet : MonoBehaviour
         if (other.transform.tag == "Target")
         {
             Enemy enemy = other.GetComponent<Enemy>();
-            enemy.ApplyDamage(GameController.Instance.GetPlayerDamage());
+            bool isCrit = GameController.Instance.IsCrit();
+            float damage = GameController.Instance.GetPlayerDamage();
+            if (isCrit)
+                damage *= 2.0f;
+            enemy.ApplyDamage(damage);
+
+            GameController.Instance.ShowDamageText(other.transform.position + Vector3.up*3.0f, damage, isCrit);
         }
     }
 }

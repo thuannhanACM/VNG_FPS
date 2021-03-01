@@ -73,18 +73,34 @@ public class Player : MonoBehaviour
 
         if (mFireTimer <= 0.0f)
         {
-            mFireTimer = GetFireRate();
             animator.SetTrigger(ANIM_FIRE_TRIGGER);
 
-            Instantiate(mGunFlashFX, mFirePos.position, Quaternion.identity);
+            GameObject flash = Instantiate(mGunFlashFX);
+            flash.transform.parent = mFirePos;
+            flash.transform.localPosition = Vector3.zero;
+            flash.transform.localEulerAngles = Vector3.zero;
 
-            GameObject bulletObj = Instantiate(mBulletPrefab, mFirePos.position, Quaternion.identity);
-            Bullet bullet = bulletObj.GetComponent<Bullet>();
-            if (bullet != null)
-                bullet.Init(mBulletSpeed, targetPos);
+            if (GameController.Instance.IS_DOUBLE_BULLET)
+            {
+                for (int i = 0; i < 2; i++)
+                {   
+                    GameObject bulletObj = Instantiate(mBulletPrefab, mFirePos.position + mFirePos.right * ((i == 1 )? 0.25f: -0.25f), Quaternion.identity);
+                    Bullet bullet = bulletObj.GetComponent<Bullet>();
+                    if (bullet != null)
+                        bullet.Init(mBulletSpeed, targetPos);
+                }
+            }
+            else
+            {
+                GameObject bulletObj = Instantiate(mBulletPrefab, mFirePos.position, Quaternion.identity);
+                Bullet bullet = bulletObj.GetComponent<Bullet>();
+                if (bullet != null)
+                    bullet.Init(mBulletSpeed, targetPos);
+            }
 
             if(GameController.Instance.SFX)
                 mShootingSource.PlayOneShot(mShootingSource.clip);
+            mFireTimer = GetFireRate();
         }
     }
 
@@ -109,7 +125,9 @@ public class Player : MonoBehaviour
 
     private float GetFireRate()
     {
-        return mFireRate;
+        float rate = mFireRate * (1.0f - GameController.Instance.BOOST_FIRERATE);
+        Debug.Log("fireRate: " + rate);
+        return rate;
     }
 
     public float GetAimingSpeed()

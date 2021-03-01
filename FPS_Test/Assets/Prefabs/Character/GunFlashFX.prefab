@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8696049722793066730}
   - component: {fileID: 1901535512721775130}
   - component: {fileID: 6280768778579328946}
+  - component: {fileID: 6969572111366251859}
   m_Layer: 0
   m_Name: GunFlashFX
   m_TagString: Untagged
@@ -115,7 +116,7 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0.15
+      scalar: 0.25
       minScalar: 5
       maxCurve:
         serializedVersion: 2
@@ -4811,3 +4812,16 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &6969572111366251859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4917166587755799898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7af7cd04d8d48674bb9dffc362c72998, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mLifeTime: 0.75

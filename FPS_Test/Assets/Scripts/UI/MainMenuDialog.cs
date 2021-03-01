@@ -38,8 +38,8 @@ public class MainMenuDialog : BaseDialog
 
     public override void Close(float sp = 1, Action callback = null)
     {
-        BlocksRaycasts = true;
-        Interactable = true;
+        BlocksRaycasts = false;
+        Interactable = false;
         rectTransform
             .DOScale(0.0f, sp)
             .SetEase(mEaseType)

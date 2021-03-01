@@ -8,7 +8,7 @@ public class UIManager : Singleton<UIManager>
 {
     public enum Dialog {
         MainMenu,
-        InGameMessage
+        UpgradeDialog
     }
 
     [SerializeField]
@@ -85,5 +85,15 @@ public class UIManager : Singleton<UIManager>
     public void OnGameWin()
     {
         mGameWinPanel.SetActive(true);
+    }
+
+    public void ShowUpgradeDialog(GameController.UPGRADE[] upgrades)
+    {
+        ((UpgradeDialog)mDialogs[(int)Dialog.UpgradeDialog]).SetUpgrade(upgrades);
+    }
+
+    public void CloseUpgradeDialog()
+    {
+        mDialogs[(int)Dialog.UpgradeDialog].Close(1.0f);
     }
 }
